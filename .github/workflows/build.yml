@@ -1,39 +1,38 @@
-name: Build Kivy Android App
+name: Build Kivy App
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    env:
-      ANDROID_SDK_ROOT: /opt/android-sdk
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
       - name: Install dependencies
         run: |
-          sudo apt update
-          sudo apt install -y python3-pip zip unzip openjdk-17-jdk
-          pip install --upgrade pip
+          sudo apt-get update
+          sudo apt-get install -y python3-pip python3-dev git zip unzip openjdk-11-jdk wget
+          python -m pip install --upgrade pip
           pip install buildozer cython
-
-      - name: Accept Android SDK Licenses
-        run: |
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses || true
-          yes | $ANDROID_SDK_ROOT/tools/bin/sdkmanager --licenses || true
 
       - name: Build APK
         run: |
-          buildozer -v android debug
+          buildozer android debug
+        env:
+          JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: HelloApp-APK
+          name: my-calculator-app-apk
           path: bin/*.apk
 
