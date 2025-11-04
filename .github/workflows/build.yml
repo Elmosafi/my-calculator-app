@@ -18,16 +18,18 @@ jobs:
       with:
         python-version: '3.8'
         
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+      
     - name: Install system dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-          zip unzip openjdk-11-jdk \
+          zip unzip \
           autoconf libtool pkg-config \
           zlib1g-dev libncurses5-dev \
           cmake libffi-dev libssl-dev \
-          python3-dev libsdl2-dev \
-          git wget curl unzip
+          python3-dev libsdl2-dev
         
     - name: Install Buildozer and dependencies
       run: |
@@ -35,12 +37,6 @@ jobs:
         pip install buildozer
         pip install cython==0.29.33
         pip install setuptools
-        
-    - name: Accept Android SDK licenses
-      run: |
-        mkdir -p ~/.android
-        touch ~/.android/repositories.cfg
-        yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
         
     - name: Build APK
       run: |
