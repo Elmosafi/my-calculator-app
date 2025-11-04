@@ -10,10 +10,10 @@ jobs:
     
     steps:
     - name: Download code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       
     - name: Setup Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.8'
         
@@ -21,10 +21,11 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-          zip unzip openjdk-8-jdk \
+          zip unzip openjdk-11-jdk \
           autoconf libtool pkg-config \
           zlib1g-dev libncurses5-dev \
-          cmake libffi-dev libssl-dev
+          cmake libffi-dev libssl-dev \
+          python3-dev libsdl2-dev
           
     - name: Install Buildozer
       run: |
@@ -36,7 +37,7 @@ jobs:
         buildozer -v android debug
         
     - name: Upload APK
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: calculator-apk
         path: bin/*.apk
