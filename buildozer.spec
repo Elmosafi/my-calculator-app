@@ -1,20 +1,12 @@
 [app]
-title = My Calculator
+title = Calculator
 package.name = calculator
-package.domain = org.elmosafi
+package.domain = org.test
 
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas
+source.include_exts = py
 
-version = 1.0
+version = 0.1
 requirements = python3,kivy
 
 orientation = portrait
-
-[buildozer]
-log_level = 2
-
-[app]
-android.permissions = INTERNET
-android.api = 28
-android.minapi = 21
