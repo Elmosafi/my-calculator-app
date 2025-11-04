@@ -41,7 +41,7 @@ jobs:
     - name: Install Android Build Tools and accept licenses
       run: |
         yes | sdkmanager --licenses || true
-        yes | sdkmanager --install "platforms;android-35" "build-tools;36.1.0" "platform-tools"
+        yes | sdkmanager --install "platforms;android-35" "build-tools;35.0.1" "platform-tools"
         
     - name: Verify build-tools installation
       run: |
