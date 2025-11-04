@@ -10,7 +10,7 @@ jobs:
     timeout-minutes: 60
     
     steps:
-    - name: Download code
+    - name: Checkout code
       uses: actions/checkout@v4
       
     - name: Setup Python
@@ -20,23 +20,27 @@ jobs:
         
     - name: Setup Android SDK
       uses: android-actions/setup-android@v2
-      
+      with:
+        cmdline-tools-version: latest
+        
     - name: Install system dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-          zip unzip \
+          zip unzip openjdk-11-jdk \
           autoconf libtool pkg-config \
           zlib1g-dev libncurses5-dev \
           cmake libffi-dev libssl-dev \
           python3-dev libsdl2-dev
         
-    - name: Install Buildozer and dependencies
+    - name: Install Buildozer and Python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install buildozer
-        pip install cython==0.29.33
-        pip install setuptools
+        pip install buildozer cython==0.29.33 setuptools
+        
+    - name: Accept Android SDK licenses
+      run: |
+        yes | sdkmanager --licenses || true
         
     - name: Build APK
       run: |
@@ -45,6 +49,7 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: calculator-apk
+        name: my-calculator-app
         path: bin/*.apk
         retention-days: 30
+
