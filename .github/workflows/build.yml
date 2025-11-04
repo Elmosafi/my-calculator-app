@@ -1,0 +1,43 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Download code
+      uses: actions/checkout@v2
+      
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+        
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          zip unzip openjdk-8-jdk \
+          autoconf libtool pkg-config \
+          zlib1g-dev libncurses5-dev \
+          cmake libffi-dev libssl-dev
+          
+    - name: Install Buildozer
+      run: |
+        pip install buildozer
+        pip install cython
+        
+    - name: Build APK
+      run: |
+        buildozer -v android debug
+        
+    - name: Upload APK
+      uses: actions/upload-artifact@v2
+      with:
+        name: calculator-apk
+        path: bin/*.apk
+        retention-days: 30
