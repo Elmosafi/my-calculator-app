@@ -1,49 +1,42 @@
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
+from kivy.uix.label import Label
 
-class CalculatorApp(App):
+
+class HelloApp(App):
     def build(self):
-        main_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=10)
         
-        self.display = TextInput(
-            text='0', 
-            font_size=32,
-            halign='right',
-            readonly=True,
-            multiline=False
+        self.input_name = TextInput(
+            hint_text="اكتب اسمك هنا",
+            multiline=False,
+            size_hint=(1, 0.2)
         )
-        main_layout.add_widget(self.display)
         
-        buttons_layout = GridLayout(cols=4, spacing=5)
-        buttons = [
-            '7', '8', '9', '/',
-            '4', '5', '6', '*',
-            '1', '2', '3', '-',
-            'C', '0', '=', '+'
-        ]
+        self.label = Label(text="أهلاً بك 👋", font_size='20sp', size_hint=(1, 0.2))
         
-        for button in buttons:
-            btn = Button(text=button, font_size=24)
-            btn.bind(on_press=self.on_button_press)
-            buttons_layout.add_widget(btn)
+        btn = Button(
+            text="قل مرحباً 👇",
+            size_hint=(1, 0.2),
+            on_press=self.say_hello
+        )
         
-        main_layout.add_widget(buttons_layout)
-        return main_layout
-    
-    def on_button_press(self, instance):
-        current = self.display.text
-        if instance.text == 'C':
-            self.display.text = '0'
-        elif instance.text == '=':
-            try:
-                self.display.text = str(eval(current))
-            except:
-                self.display.text = 'Error'
-        else:
-            self.display.text = instance.text if current == '0' else current + instance.text
+        layout.add_widget(self.input_name)
+        layout.add_widget(btn)
+        layout.add_widget(self.label)
+        
+        return layout
 
-if __name__ == '__main__':
-    CalculatorApp().run()
+    def say_hello(self, instance):
+        name = self.input_name.text.strip()
+        if name:
+            self.label.text = f"Hello, {name} 👋"
+        else:
+            self.label.text = "اكتب اسمك أولاً 😊"
+
+
+if __name__ == "__main__":
+    HelloApp().run()
+
